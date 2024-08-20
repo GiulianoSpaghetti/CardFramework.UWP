@@ -38,7 +38,10 @@ namespace org.altervista.numerone.framework
 				{
 					for (j = 0; j<numeroCarte && !c.StessoSeme(v[j]); j++) ;
 					if (j != numeroCarte)
+					{
 						throw new Exception("Operazione non valida");
+						return (UInt16)Giocatore.Carta_GIOCATA.NESSUNA_Carta_GIOCATA;
+					}
 				}
 			}
 			return carta;
