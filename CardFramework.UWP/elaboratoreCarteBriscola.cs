@@ -14,10 +14,10 @@ namespace org.altervista.numerone.framework
 {
     public class ElaboratoreCarteBriscola : ElaboratoreCarte
 	{
-		private UInt16 numeroCarte, min, max;
-		private bool[] doppione;
-		private static UInt16 CartaBriscola;
-		private bool inizio,
+		protected UInt16 numeroCarte, min, max;
+		protected bool[] doppione;
+		protected static UInt16 CartaBriscola;
+		protected bool inizio,
 				 briscolaDaPunti;
 		public static Random r = new Random();
 		public ElaboratoreCarteBriscola(bool punti = true, UInt16 a = 40, UInt16 m = 0, UInt16 n = 39)

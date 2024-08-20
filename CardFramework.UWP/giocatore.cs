@@ -13,15 +13,14 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace org.altervista.numerone.framework
 {
-  public  class Giocatore
+	public class Giocatore
 	{
-		private string nome;
-		private Carta[] mano;
-		private bool ordinaMano;
-		private UInt16 numeroCarte, iCarta, iCartaGiocata, punteggio;
-		private UInt16 dimensioneMano;
-		private GiocatoreHelper helper;
-		private List<UInt16> punteggi;
+		protected string nome;
+		protected Carta[] mano;
+		protected bool ordinaMano;
+		protected UInt16 numeroCarte, iCarta, iCartaGiocata, punteggio;
+		protected UInt16 dimensioneMano;
+		protected GiocatoreHelper helper;
 		public enum Carta_GIOCATA { NESSUNA_Carta_GIOCATA = UInt16.MaxValue };
 		public Giocatore(GiocatoreHelper h, string n, UInt16 carte, bool ordina = true)
 		{
@@ -34,7 +33,6 @@ namespace org.altervista.numerone.framework
 			nome = n;
 			mano = new Carta[dimensioneMano];
 			iCarta = 0;
-			punteggi = new List<UInt16>();
 		}
 		public string GetNome() { return nome; }
 		public void SetNome(string n) { nome = n; }
@@ -56,8 +54,8 @@ namespace org.altervista.numerone.framework
 				for (i = (UInt16)(iCarta - 2); i < UInt16.MaxValue && iCarta > 1 && mano[i].CompareTo(mano[i + 1]) < 0; i--)
 				{
 					temp = mano[i];
-					mano[i] = mano[i+1];
-					mano[i+1] = temp;
+					mano[i] = mano[i + 1];
+					mano[i + 1] = temp;
 				}
 				return;
 			}
@@ -66,7 +64,7 @@ namespace org.altervista.numerone.framework
 
 		}
 
-		private void Ordina(Mazzo m)
+		protected void Ordina(Mazzo m)
 		{
 			UInt16 i = 0;
 			UInt16 j = 0;
@@ -103,26 +101,26 @@ namespace org.altervista.numerone.framework
 		{
 			iCartaGiocata = helper.Gioca(i, mano, numeroCarte);
 		}
-		public void Gioca(UInt16 i, Giocatore g1, bool stessoSeme=false)
+		public void Gioca(UInt16 i, Giocatore g1, bool stessoSeme = false)
 		{
 			iCartaGiocata = helper.Gioca(i, mano, numeroCarte, g1.GetCartaGiocata(), stessoSeme);
 		}
-        public void Gioca(UInt16 i, List<Carta> piatto)
-        {
-            iCartaGiocata = helper.Gioca(i, mano, numeroCarte, piatto);
-        }
-        public void AggiornaPunteggio(Giocatore g)
+		public void Gioca(UInt16 i, List<Carta> piatto)
+		{
+			iCartaGiocata = helper.Gioca(i, mano, numeroCarte, piatto);
+		}
+		public void AggiornaPunteggio(Giocatore g)
 		{
 			helper.AggiornaPunteggio(ref punteggio, GetCartaGiocata(), g.GetCartaGiocata());
 		}
 
-        public BitmapImage GetImmagine(UInt16 quale)
-        {
-            return mano[quale].GetImmagine();
-        }
+		public BitmapImage GetImmagine(UInt16 quale)
+		{
+			return mano[quale].GetImmagine();
+		}
 
 
-        public UInt16 GetICartaGiocata()
+		public UInt16 GetICartaGiocata()
 		{
 			return iCartaGiocata;
 		}
@@ -131,30 +129,5 @@ namespace org.altervista.numerone.framework
 		{
 			return numeroCarte;
 		}
-
-		public void Resetta(GiocatoreHelper h=null, bool resettaPunteggi=true)
-		{
-			numeroCarte = dimensioneMano;
-			if (h != null)
-				helper = h;
-			iCartaGiocata = (UInt16)(Carta_GIOCATA.NESSUNA_Carta_GIOCATA);
-			iCarta = 0;
-			for (UInt16 i = 0; i < dimensioneMano; i++)
-				mano[i] = null;
-			if (resettaPunteggi)
-				punteggi.Clear();
-			else if (GetPunteggio() > 0)
-				punteggi.Add(GetPunteggio());
-            punteggio = 0;
-        }
-
-        public UInt64 GetPunteggi()
-		{
-			UInt64 p=0;
-			foreach (UInt16 i in punteggi)
-				p += i;
-			return p;
-		}
 	}
-
 }

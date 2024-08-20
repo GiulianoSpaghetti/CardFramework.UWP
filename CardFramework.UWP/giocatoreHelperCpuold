@@ -12,10 +12,10 @@ using System.Collections.Generic;
 
 namespace org.altervista.numerone.framework
 {
-    public abstract class GiocatoreHelperCpu : GiocatoreHelper
+    public class GiocatoreHelperCpu : GiocatoreHelper
     {
-        protected readonly Carta briscola;
-        protected UInt16 GetBriscola(Carta[] mano, UInt16 numeroCarte)
+        private readonly Carta briscola;
+        private UInt16 GetBriscola(Carta[] mano, UInt16 numeroCarte)
         {
             UInt16 i;
             for (i = 0; i < numeroCarte; i++)
@@ -27,13 +27,13 @@ namespace org.altervista.numerone.framework
         {
             briscola = Carta.GetCarta(b);
         }
-        protected UInt16 getSoprataglio(Carta[] mano, UInt16 numeroCarte, Carta c, bool maggiore)
+        private UInt16 getSoprataglio(Carta[] mano, UInt16 numeroCarte, Carta c, bool maggiore)
         {
             bool trovata = false;
             UInt16 i;
             if (maggiore)
             {
-                for (i = (UInt16)(numeroCarte - 1); i <numeroCarte; i--)
+                for (i = (UInt16) (numeroCarte- 1); i < numeroCarte; i--)
                     if (c.StessoSeme(mano[i]) && c.CompareTo(mano[i]) > 0)
                     {
                         trovata = true;
@@ -59,30 +59,53 @@ namespace org.altervista.numerone.framework
 
         protected UInt16 GetPrimaCartaConSeme(Carta[] mano, UInt16 numeroCarte, Carta c)
         {
-            UInt16 ca=numeroCarte;
-            for (UInt16 i = 0; i < numeroCarte && ca==numeroCarte; i++)
+            UInt16 ca = numeroCarte;
+            for (UInt16 i = 0; i < numeroCarte && ca == numeroCarte; i++)
                 if (c.StessoSeme(mano[i]))
                     ca = i;
             return ca;
-                
+
         }
         public UInt16 Gioca(UInt16 x, Carta[] mano, UInt16 numeroCarte)
         {
             UInt16 i;
-            for (i = (UInt16)(numeroCarte - 1); i<numeroCarte; i--) ;
+            for (i = (UInt16)(numeroCarte - 1); i < numeroCarte; i--) ;
             if ((i >= numeroCarte) || (mano[i].GetPunteggio() > 4 || briscola.StessoSeme(mano[i])))
                 i = 0;
             return i;
 
         }
-        public abstract UInt16 Gioca(UInt16 x, Carta[] mano, UInt16 numeroCarte, Carta c, bool stessoSeme);
-        public void AggiornaPunteggio(ref UInt16 punteggioAttuale, Carta c, Carta c1) { punteggioAttuale = (UInt16)(punteggioAttuale + c.GetPunteggio() + c1.GetPunteggio()); }
-
-        public abstract UInt16 GetLivello();
-
+        public UInt16 Gioca(UInt16 x, Carta[] mano, UInt16 numeroCarte, Carta c, bool stessoSeme)
+        {
+            UInt16 i = (UInt16)ElaboratoreCarteBriscola.r.Next(0, UInt16.MaxValue);
+            if (!briscola.StessoSeme(c))
+            {
+                if ((i = getSoprataglio(mano, numeroCarte, c, true)) < numeroCarte)
+                    return i;
+                if (c.GetPunteggio() > 0 && (i = GetBriscola(mano, numeroCarte)) < numeroCarte)
+                {
+                    if (c.GetPunteggio() > 4)
+                        return i;
+                    if (mano[i].GetPunteggio() > 0)
+                        if (ElaboratoreCarteBriscola.r.Next() % 10 < 5)
+                            return i;
+                }
+            }
+            else
+            {
+                if (ElaboratoreCarteBriscola.r.Next() % 10 < 5 && (i = getSoprataglio(mano,numeroCarte, c, false)) < numeroCarte)
+                    return i;
+            }
+            if (stessoSeme)
+                i = GetPrimaCartaConSeme(mano, numeroCarte, c);
+            if (i >= numeroCarte)
+                i = 0;
+            return i;
+        }
         public ushort Gioca(ushort i, Carta[] v, ushort numeroCarte, List<Carta> piatto)
         {
             throw new NotImplementedException();
         }
+        public void AggiornaPunteggio(ref UInt16 punteggioAttuale, Carta c, Carta c1) { punteggioAttuale = (UInt16)(punteggioAttuale + c.GetPunteggio() + c1.GetPunteggio()); }
     }
 }

@@ -12,11 +12,11 @@ namespace org.altervista.numerone.framework
 {
     public class Mazzo
     {
-        private UInt16[] carte;
-        private UInt16 numeroCarte;
-        private readonly ElaboratoreCarte elaboratore;
-        private String nome;
-        private void Mischia()
+        protected UInt16[] carte;
+        protected UInt16 numeroCarte;
+        protected readonly ElaboratoreCarte elaboratore;
+        protected String nome;
+        protected void Mischia()
         {
             for (numeroCarte = 0; numeroCarte < elaboratore.GetNumeroCarte(); numeroCarte++)
                 carte[numeroCarte] = elaboratore.GetCarta();

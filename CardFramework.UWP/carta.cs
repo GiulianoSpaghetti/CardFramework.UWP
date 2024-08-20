@@ -15,14 +15,14 @@ namespace org.altervista.numerone.framework
 {
     public class Carta
     {
-        private readonly UInt16 seme,
+        protected readonly UInt16 seme,
                    valore,
                    punteggio;
-        private string semeStr;
-        private static CartaHelperBriscola helper;
-        private readonly static Carta[] carte = new Carta[40];
+        protected string semeStr;
+        protected static CartaHelperBriscola helper;
+        protected readonly static Carta[] carte = new Carta[40];
 
-        private BitmapImage img;
+        protected BitmapImage img;
 
         private Carta(UInt16 n, CartaHelperBriscola h)
         {

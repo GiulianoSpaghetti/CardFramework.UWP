@@ -40,7 +40,6 @@ namespace org.altervista.numerone.framework
 					if (j != numeroCarte)
 					{
 						throw new Exception("Operazione non valida");
-						return (UInt16)Giocatore.Carta_GIOCATA.NESSUNA_Carta_GIOCATA;
 					}
 				}
 			}
